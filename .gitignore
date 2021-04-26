@@ -1,0 +1,5 @@
+# project files
+*.idea*
+
+# Jupyter Notebooks
+*.ipynb*

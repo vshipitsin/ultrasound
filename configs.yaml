@@ -1,0 +1,18 @@
+paths:
+    data: ../Datasets/Endocrinology # path to folder with train data
+    log_dir: logs_segmentation/fold_3 # path to folder where the results of experiments from the tensorboard will be recorded
+
+data_parameters:
+    image_size: 512, 512 # model image input size (height, width)
+    batch_size: 4 # batch size
+
+model_parameters:
+    AdaptiveLayer:
+        adjustment: None # None, spectrum, spectrum_log, phase initial adaptive adjustment layer
+    UNet:
+        init_features: 32 # number of channels (features) in initial conv
+        depth: 3 # number of downsteps
+
+train_parameters:
+    lr: 0.001 # learning rate
+    epochs: 25 # number of epochs
