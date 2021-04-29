@@ -3,3 +3,9 @@
 
 # Jupyter Notebooks
 *.ipynb*
+
+# logs files
+logs_*/
+
+# saved models pth files
+models_*/

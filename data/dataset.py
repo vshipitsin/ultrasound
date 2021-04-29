@@ -38,8 +38,16 @@ class UltrasoundDataset(object):
                     image_path = os.path.join(patient_path, 'Images', '{}.tif'.format(image_id))
                     mask_path = os.path.join(patient_path, 'Masks', '{}.labels.tif'.format(image_id))
 
-                    frames = [frame for frame in range(Image.open(image_path).n_frames)]
-                    classes = [classes_dict[os.path.split(patient_path)[-1]][image_id] for _ in range(len(frames))]
+                    mask = Image.open(mask_path)
+                    frames = [frame for frame in range(mask.n_frames)]
+                    classes = []
+                    for frame in frames:
+                        mask.seek(frame)
+                        if not np.array(mask).any():
+                            classes.append(0)
+                        else:
+                            classes.append(classes_dict[os.path.split(patient_path)[-1]][image_id])
+
                     image_paths = [image_path for _ in range(len(frames))]
                     mask_paths = [mask_path for _ in range(len(frames))]
 
