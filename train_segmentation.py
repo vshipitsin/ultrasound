@@ -1,12 +1,10 @@
-import argparse
 import os
-
 import torch
 import torchvision
 
 from torch.utils.tensorboard import SummaryWriter
 
-from utils import get_params
+from utils import get_params, parse_args
 
 from data.transforms import ToTensor, Resize
 from data.dataset import SegmentationDataset, data_loaders
@@ -63,8 +61,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--nolog', action='store_true', help='turn off logging')
-    args = parser.parse_args()
-
-    main(args)
+    main(parse_args())
