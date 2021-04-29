@@ -6,7 +6,6 @@ import os
 import random
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 
 
 class UltrasoundDataset(object):
@@ -16,7 +15,7 @@ class UltrasoundDataset(object):
         self.dataset_table_path = self.dataset + '.csv'
 
         self.make_dataset_table()
-        self.train_val_split(val_size, random_seed=3)
+        self.train_val_split(val_size, random_seed=1)
 
     def make_dataset_table(self):
         print('dataset csv table creating...')
@@ -55,18 +54,18 @@ class UltrasoundDataset(object):
                 image_paths = sorted([os.path.join(class_type_path, name) for name in os.listdir(class_type_path)
                                       if 'mask' not in name])
 
-                for image_path in tqdm(image_paths):
+                for image_path in image_paths:
                     mask_path = ''.join([os.path.splitext(image_path)[0], '_mask.png'])
-                    data.append(np.array([image_path, mask_path, class_type]).T)
+                    data.append(np.array([[image_path, mask_path, class_type]]))
 
             pd.DataFrame(np.concatenate(data),
                          columns=['image', 'mask', 'class']).to_csv(self.dataset_table_path, index=False)
         elif self.dataset == 'BPUI':
             image_names = sorted([name for name in os.listdir(self.data_path) if 'mask' not in name])
-            for image_name in tqdm(image_names):
+            for image_name in image_names:
                 image_path = os.path.join(self.data_path, image_name)
                 mask_path = os.path.join(self.data_path, ''.join([os.path.splitext(image_name)[0], '_mask.tif']))
-                data.append(np.array([image_path, mask_path]).T)
+                data.append(np.array([[image_path, mask_path]]))
 
             pd.DataFrame(np.concatenate(data), columns=['image', 'mask']).to_csv(self.dataset_table_path, index=False)
 
