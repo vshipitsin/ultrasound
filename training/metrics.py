@@ -1,4 +1,5 @@
 import torch
+from sklearn.metrics import f1_score
 
 
 class DiceMetric(object):
@@ -31,3 +32,16 @@ class DiceMetric(object):
         dice_coefficients = torch.sum(weights * (2 * intersections) / (unions + 1e-16), dim=1)
 
         return torch.mean(dice_coefficients)
+
+
+class F1Score(object):
+    def __init__(self, average='macro'):
+        self.average = average
+
+    @staticmethod
+    def _input_format(predictions, targets):
+        return torch.argmax(predictions, dim=1).cpu().tolist(), targets.cpu().tolist()
+
+    def __call__(self, predictions, targets):
+        predictions, targets = self._input_format(predictions, targets)
+        return f1_score(y_true=targets, y_pred=predictions, average=self.average)
