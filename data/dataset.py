@@ -57,6 +57,7 @@ class UltrasoundDataset(object):
                          columns=['image', 'mask', 'frame', 'class']).to_csv(self.dataset_table_path, index=False)
         elif self.dataset == 'BUSI':
             classes = sorted([name for name in os.listdir(self.data_path)])
+            classes_dict = dict((class_type, index) for index, class_type in enumerate(classes))
             for class_type in classes:
                 class_type_path = os.path.join(self.data_path, class_type)
                 image_paths = sorted([os.path.join(class_type_path, name) for name in os.listdir(class_type_path)
@@ -64,7 +65,7 @@ class UltrasoundDataset(object):
 
                 for image_path in image_paths:
                     mask_path = ''.join([os.path.splitext(image_path)[0], '_mask.png'])
-                    data.append(np.array([[image_path, mask_path, class_type]]))
+                    data.append(np.array([[image_path, mask_path, classes_dict[class_type]]]))
 
             pd.DataFrame(np.concatenate(data),
                          columns=['image', 'mask', 'class']).to_csv(self.dataset_table_path, index=False)
