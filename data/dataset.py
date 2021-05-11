@@ -9,13 +9,13 @@ import pandas as pd
 
 
 class UltrasoundDataset(object):
-    def __init__(self, data_path, val_size=0.2):
+    def __init__(self, data_path, val_size=0.2, random_seed=1):
         self.data_path = data_path
         self.dataset = os.path.basename(os.path.normpath(self.data_path))
         self.dataset_table_path = self.dataset + '.csv'
 
         self.make_dataset_table()
-        self.train_val_split(val_size, random_seed=1)
+        self.train_val_split(val_size, random_seed=random_seed)
 
     def make_dataset_table(self):
         print('dataset csv table creating...')
@@ -90,29 +90,10 @@ class UltrasoundDataset(object):
                    pd.DataFrame(phase, columns=['phase'])], axis=1).to_csv(self.dataset_table_path, index=False)
 
 
-def data_loaders(dataset, transform, params):
-    data = UltrasoundDataset(data_path=params['data_path'], val_size=0.2)
-
-    train_dataset = dataset(dataset_table_path=data.dataset_table_path,
-                            phase='train',
-                            transform=transform)
-    train_dataloader = DataLoader(dataset=train_dataset,
-                                  batch_size=params['batch_size'],
-                                  shuffle=True,
-                                  num_workers=4)
-
-    val_dataset = dataset(dataset_table_path=data.dataset_table_path,
-                          phase='val',
-                          transform=transform)
-    val_dataloader = DataLoader(dataset=val_dataset,
-                                batch_size=params['batch_size'],
-                                num_workers=4)
-
-    return train_dataloader, val_dataloader
-
-
 class BaseDataset(Dataset):
     def __init__(self, dataset_table_path, phase='train', transform=None):
+        super(BaseDataset, self).__init__()
+
         self.dataset = os.path.splitext(dataset_table_path)[0]
 
         dataset_table = pd.read_csv(dataset_table_path)
@@ -165,3 +146,38 @@ class ClassificationDataset(BaseDataset):
             image = self.transform(image)
 
         return image, class_type
+
+
+class DenoisingDataset(BaseDataset):
+    def __init__(self, dataset_table_path, phase='train', transform=None):
+        super(DenoisingDataset, self).__init__(dataset_table_path, phase, transform)
+
+    def __getitem__(self, index):
+        image = self.read_data(index, 'image')
+        clean_image = self.read_data(index, 'image')
+
+        if self.do_transform():
+            image, clean_image = self.transform((image, clean_image))
+
+        return image, clean_image
+
+
+def data_loaders(dataset, train_transform, val_transform, params):
+    data = UltrasoundDataset(data_path=params['data_path'], val_size=0.2, random_seed=params['random_seed'])
+
+    train_dataset = dataset(dataset_table_path=data.dataset_table_path,
+                            phase='train',
+                            transform=train_transform)
+    train_dataloader = DataLoader(dataset=train_dataset,
+                                  batch_size=params['batch_size'],
+                                  shuffle=True,
+                                  num_workers=4)
+
+    val_dataset = dataset(dataset_table_path=data.dataset_table_path,
+                          phase='val',
+                          transform=val_transform)
+    val_dataloader = DataLoader(dataset=val_dataset,
+                                batch_size=params['batch_size'],
+                                num_workers=4)
+
+    return train_dataloader, val_dataloader
