@@ -21,16 +21,18 @@ torch.set_printoptions(precision=2)
 # for reproducibility
 make_reproducible(seed=0)
 
-device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
-
 
 def main(args):
+    device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu')
+
     params = get_params()
+    params.update({'random_seed': args.random_seed})
 
     transform = torchvision.transforms.Compose([torchvision.transforms.Resize(size=params['image_size']),
                                                 torchvision.transforms.ToTensor()])
     train_dataloader, val_dataloader = data_loaders(dataset=ClassificationDataset,
-                                                    transform=transform,
+                                                    train_transform=transform,
+                                                    val_transform=transform,
                                                     params=params)
 
     model = ResNet(n_channels=1, n_classes=params['n_classes'],
@@ -41,7 +43,7 @@ def main(args):
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=params['lr'])
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=0.5, patience=5)
-    metric = F1Score()
+    metrics = {'F1Score': F1Score()}
 
     writer = None
     if not args.nolog:
@@ -54,7 +56,7 @@ def main(args):
           train_dataloader, val_dataloader,
           criterion,
           optimizer, scheduler,
-          metric,
+          metrics,
           n_epochs=params['n_epochs'],
           device=device,
           writer=writer)

@@ -13,7 +13,7 @@ from models.segmentation import UNet
 
 from training.utils import make_reproducible, print_model_info
 from training.model_training import train
-from training.losses import CombinedLoss, CrossEntropyLoss, MultilabelDiceLoss
+from training.losses import CombinedLoss, MultilabelDiceLoss, CrossEntropyLoss
 from training.metrics import DiceMetric
 
 # for printing
@@ -22,15 +22,17 @@ torch.set_printoptions(precision=2)
 # for reproducibility
 make_reproducible(seed=0)
 
-device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
-
 
 def main(args):
-    params = get_params()
+    device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu')
 
-    transform = torchvision.transforms.Compose([Resize(size=params['image_size']), ToTensor()])
+    params = get_params()
+    params.update({'random_seed': args.random_seed})
+
+    transform = torchvision.transforms.Compose([Resize(size=params['image_size']), ToTensor(encode_map=True)])
     train_dataloader, val_dataloader = data_loaders(dataset=SegmentationDataset,
-                                                    transform=transform,
+                                                    train_transform=transform,
+                                                    val_transform=transform,
                                                     params=params)
 
     model = UNet(n_channels=1, n_classes=2,
@@ -41,7 +43,7 @@ def main(args):
     criterion = CombinedLoss([CrossEntropyLoss(), MultilabelDiceLoss()], [0.4, 0.6])
     optimizer = torch.optim.Adam(model.parameters(), lr=params['lr'])
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=0.5, patience=5)
-    metric = DiceMetric()
+    metrics = {'Dice': DiceMetric()}
 
     writer = None
     if not args.nolog:
@@ -54,7 +56,7 @@ def main(args):
           train_dataloader, val_dataloader,
           criterion,
           optimizer, scheduler,
-          metric,
+          metrics,
           n_epochs=params['n_epochs'],
           device=device,
           writer=writer)
