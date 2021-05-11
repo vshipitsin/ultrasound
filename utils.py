@@ -25,6 +25,9 @@ def get_params():
     params.update({'blocks': tuple(map(int, configs['model_parameters']['classification']['ResNet']['blocks'].split(', '))),
                    'filters': tuple(map(int, configs['model_parameters']['classification']['ResNet']['filters'].split(', ')))})
 
+    params.update({'num_features': int(configs['model_parameters']['denoising']['DnCNN']['num_features']),
+                   'num_layers': int(configs['model_parameters']['denoising']['DnCNN']['num_layers'])})
+
     params.update({'lr': float(configs['train_parameters']['lr']),
                    'n_epochs': int(configs['train_parameters']['epochs'])})
 
@@ -33,6 +36,9 @@ def get_params():
 
 def parse_args():
     parser = argparse.ArgumentParser()
+
+    parser.add_argument('-d', '--device', type=int, default=0, help='cuda device id number')
+    parser.add_argument('-rs', '--random_seed', type=int, default=1, help='random seed')
     parser.add_argument('--nolog', action='store_true', help='turn off logging')
 
     return parser.parse_args()

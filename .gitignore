@@ -9,3 +9,6 @@ logs_*/
 
 # saved models pth files
 models_*/
+
+# plots
+plots*/
