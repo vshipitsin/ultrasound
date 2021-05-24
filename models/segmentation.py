@@ -18,7 +18,7 @@ class UNet(torch.nn.Module):
         if self.adaptive_layer_type in ('spectrum', 'spectrum_log', 'phase'):
             self.adaptive_layer = AdaptiveLayer((n_channels, ) + image_size,
                                                 adjustment=self.adaptive_layer_type)
-        elif self.adaptive_layer_type in ('general_spectrum', 'general_spectrum_log'):
+        elif self.adaptive_layer_type == 'general_spectrum':
             self.adaptive_layer = GeneralAdaptiveLayer((n_channels, ) + image_size,
                                                        adjustment=self.adaptive_layer_type,
                                                        activation_function_name='relu')

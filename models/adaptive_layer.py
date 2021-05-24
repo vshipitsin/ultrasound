@@ -54,7 +54,7 @@ class AdaptiveLayer(torch.nn.Module):
 
 
 class GeneralAdaptiveLayer(torch.nn.Module):
-    def __init__(self, size, adjustment='general_spectrum', activation_function_name='ReLU'):
+    def __init__(self, size, adjustment='general_spectrum', activation_function_name='relu'):
         super(GeneralAdaptiveLayer, self).__init__()
 
         self.size = size
@@ -94,15 +94,6 @@ class GeneralAdaptiveLayer(torch.nn.Module):
                            rft_tensor,
                            (rft_tensor / (spectrum + 1e-16)) * (w2 * activation(w1 * spectrum + b1) + b2))
 
-    @staticmethod
-    def general_spectrum_log_adjustment(rft_tensor, weights, activation):
-        w1, b1, w2, b2 = weights
-        spectrum = torch.sqrt(torch.pow(rft_tensor.real, 2) + torch.pow(rft_tensor.imag, 2))
-
-        return torch.where(spectrum == torch.tensor(0.0),
-                           rft_tensor,
-                           rft_tensor / (spectrum + 1e-16) * (w2 * activation(w1 * torch.log(1 + spectrum) + b1) + b2))
-
     def forward(self, x):
         weights_size = (x.shape[0],) + tuple(1 for _ in range(len(self.size)))
         transformed_dimensions = tuple([dim for dim in range(1, len(weights_size))])
@@ -118,9 +109,5 @@ class GeneralAdaptiveLayer(torch.nn.Module):
             adjusted_rft_x = self.general_spectrum_adjustment(rft_x,
                                                               weights=[w1, b1, w2, b2],
                                                               activation=self.activation)
-        elif self.adjustment == 'general_spectrum_log':
-            adjusted_rft_x = self.general_spectrum_log_adjustment(rft_x,
-                                                                  weights=[w1, b1, w2, b2],
-                                                                  activation=self.activation)
 
         return torch.fft.irfftn(adjusted_rft_x, dim=transformed_dimensions)

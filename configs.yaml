@@ -9,7 +9,7 @@ data_parameters:
 
 model_parameters:
     AdaptiveLayer:
-        adjustment: None # None, spectrum, spectrum_log, phase, general_spectrum or general_spectrum_log initial adaptive adjustment layer
+        adjustment: None # None, spectrum, spectrum_log, phase or general_spectrum adaptive adjustment layer
     segmentation:
         UNet:
             init_features: 32 # number of channels (features) in initial conv
