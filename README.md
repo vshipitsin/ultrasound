@@ -100,5 +100,7 @@ From left to right: ultrasound slice, ground truth mask, segmentation result per
 
 ### Erasing Results on **BUSI** Dataset
 
+From left to right: ultrasound slice, corrupted image, restored image by base model and with _spectrum_, _spectrum log_ and _phase_ adjustments.
+
 ![erasing BUSI benign 2](inference/erasing_BUSI_benign_2.png)
 ![erasing BUSI malignant 2](inference/erasing_BUSI_malignant_2.png)
