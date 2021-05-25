@@ -55,7 +55,7 @@ To train a model, you should
 1. initially choose a CV task:
     * Segmentation
     * Classification
-    * Denoising (Erasing)
+    * Denoising/Erasing
 
 2. correct [`configs.yaml`](https://github.com/vitekspeedcuber/Ultrasound/blob/main/configs.yaml) file
 
@@ -82,3 +82,23 @@ As a result, you will receive
 
 * the saved best model `.pth` next to files with code
 * a log file `.tfevents` of the training process in folder where the results of experiments from the tensorboard will be recorded (see [`configs.yaml`](https://github.com/vitekspeedcuber/Ultrasound/blob/main/configs.yaml) file)
+
+## Inference Examples
+
+### Segmentation Results on **Endocrinology** Dataset
+
+From left to right: ultrasound slice, ground truth mask, segmentation result performed by base model and with _spectrum_, _spectrum log_ and _phase_ adjustments.
+
+![Patient 11](inference/segmentation_endocrinology_11.gif)
+![Patient 15](inference/segmentation_endocrinology_15.gif)
+
+From left to right: ultrasound slice, ground truth mask, segmentation result performed by base model and with _general spectrum_ adjustment.
+
+![Patient 4](inference/segmentation_general_endocrinology_4.gif)
+![Patient 6](inference/segmentation_general_endocrinology_6.gif)
+![Patient 7](inference/segmentation_general_endocrinology_7.gif)
+
+### Erasing Results on **BUSI** Dataset
+
+![erasing BUSI benign 2](inference/erasing_BUSI_benign_2.png)
+![erasing BUSI malignant 2](inference/erasing_BUSI_malignant_2.png)
