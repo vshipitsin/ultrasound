@@ -11,9 +11,11 @@ It is necessary:
 
 ## Datasets. How to Download and Structure
 
+**`!Attention!`** The name of the folder with the dataset must be one of the following: **`Endocrinology`**, **`BUSI`**, **`BPUI`**
+
 * **Endocrinology** Dataset
   
-  This dataset provided by [the Center for Endocrinology](https://www.endocrincentr.ru/) and is not in the public domain.
+  This dataset provided by [the Center for Endocrinology](https://www.endocrincentr.ru/) and is not in the public domain (there is no way to download it).
 
 * [Breast Ultrasound Images Dataset (Dataset **BUSI**) (253 MB)](https://scholar.cu.edu.eg/?q=afahmy/pages/dataset)
 
@@ -22,7 +24,7 @@ It is necessary:
   The archive should be unpacked and turned into the following structure:
 
   ```
-  ├───BUSI_data
+  ├───BUSI
       ├───benign
           ├───benign (1).png
           ├───benign (1)_mask.png
@@ -42,7 +44,7 @@ It is necessary:
   The archive should be unpacked and turned into the following structure:
 
     ```
-    ├───BPUI_train
+    ├───BPUI
         ├───1_1.tif
         ├───1_1_mask.tif
         └─── ...
@@ -59,9 +61,9 @@ To train a model, you should
 
 2. correct [`configs.yaml`](https://github.com/vitekspeedcuber/Ultrasound/blob/main/configs.yaml) file
 
-   ! Do not forget to specify **path to folder with train data**.
+   **`!Attention!`** Do not forget to specify **path to folder with train data**.
    
-   ! For classification task use `number of classes = 3` for **BUSI** dataset and `number of classes = 6` for **Endocrinology** dataset.
+   **`!Attention!`** For classification task use `number of classes = 3` for **BUSI** dataset and `number of classes = 6` for **Endocrinology** dataset.
 
 3. for denoising/erasing task comment/uncomment lines in file `train_denoising.py` with appropriate noise overlaying transform
 
