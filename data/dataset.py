@@ -2,6 +2,7 @@ from torch.utils.data.dataset import Dataset
 from torch.utils.data import DataLoader
 from PIL import Image
 
+import sys
 import os
 import random
 import numpy as np
@@ -20,6 +21,10 @@ class UltrasoundDataset(object):
     def make_dataset_table(self):
         print('dataset csv table creating...')
         data = []
+
+        if self.dataset not in ['Endocrinology', 'BUSI', 'BPUI']:
+            print('The folder with the dataset must have one of these names: Endocrinology, BUSI, BPUI')
+            sys.exit()
 
         if self.dataset == 'Endocrinology':
             classes_dict = {}
