@@ -1,4 +1,11 @@
+[![Python](https://img.shields.io/badge/python-3.8.3-blue.svg)](https://python.org)
+[![PyTorch](https://img.shields.io/badge/pytorch-1.8.1-red.svg)](https://pytorch.org/)
+
 # Intelligent Frequency-space Image Filtering for Computer Vision Problems in Medicine
+
+This repository is dedicated to the implementation of the idea of a **Global Adaptive Filtering Layer**
+
+![block diagram](inference/flowchart.png)
 
 ## Installation Requirements
 
@@ -8,6 +15,40 @@ It is necessary:
 
 1. create conda environment and install all packages through the command: `conda env create -f environment.yml`
 2. activate environment to run scripts from it: `conda activate ultrasound`
+
+## Usage Example
+
+To use a layer with your model, just do the following:
+
+```python
+from models.adaptive_layer import AdaptiveLayer, GeneralAdaptiveLayer
+
+
+class Model(torch.nn.Module):
+    def __init__(self, ..., n_channels=1, image_size=(512, 512), adaptive_layer_type=None):
+        super(UNet, self).__init__()
+
+        self.name = 'Model'
+        if adaptive_layer_type is not None:
+            self.name = '_'.join([self.name, 'adaptive', adaptive_layer_type])
+
+        self.adaptive_layer_type = adaptive_layer_type
+        if self.adaptive_layer_type in ('spectrum', 'spectrum_log', 'phase'):
+            self.adaptive_layer = AdaptiveLayer((n_channels, ) + image_size,
+                                                adjustment=self.adaptive_layer_type)
+        elif self.adaptive_layer_type == 'general_spectrum':
+            self.adaptive_layer = GeneralAdaptiveLayer((n_channels, ) + image_size,
+                                                       adjustment=self.adaptive_layer_type,
+                                                       activation_function_name='relu')
+        
+        # your Model class init
+
+    def forward(self, x):
+        if self.adaptive_layer_type is not None:
+            x = self.adaptive_layer(x)
+
+        # your Model class forward method
+```
 
 ## Datasets. How to Download and Structure
 
@@ -19,7 +60,10 @@ It is necessary:
 
 * [Breast Ultrasound Images Dataset (Dataset **BUSI**) (253 MB)](https://scholar.cu.edu.eg/?q=afahmy/pages/dataset)
 
-  `Al-Dhabyani W, Gomaa M, Khaled H, Fahmy A. Dataset of breast ultrasound images. Data in Brief. 2020 Feb;28:104863. DOI: 10.1016/j.dib.2019.104863.`
+  ```
+  Al-Dhabyani W, Gomaa M, Khaled H, Fahmy A. Dataset of breast ultrasound images.
+  Data in Brief. 2020 Feb;28:104863. DOI: 10.1016/j.dib.2019.104863.
+  ```
   
   The archive should be unpacked and turned into the following structure:
 
@@ -106,3 +150,21 @@ From left to right: ultrasound slice, corrupted image, restored image by base mo
 
 ![erasing BUSI benign 2](inference/erasing_BUSI_benign_2.png)
 ![erasing BUSI malignant 2](inference/erasing_BUSI_malignant_2.png)
+
+## Citation
+
+If you use this package in your publications or other work, please cite it as follows:
+
+```
+@article{shipitsin2021global,
+         author={Shipitsin, Viktor and Bespalov, Iaroslav and Dylov, Dmitry V},
+         year={2021},
+         month=Mar,
+         title={Global Adaptive Filtering Layer for Computer Vision},
+         journal={arXiv preprint arXiv:2010.01177v3},
+}
+```
+
+## Contacts
+
+Viktor Shipitsin - `shipitsin@phystech.edu`
