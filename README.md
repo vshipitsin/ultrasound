@@ -9,7 +9,7 @@ This repository is dedicated to the implementation of the idea of a **Global Ada
 
 ## Installation Requirements
 
-The file [`environment.yml`](https://github.com/vitekspeedcuber/Ultrasound/blob/main/environment.yml) contains the necessary libraries to run all scripts
+The file [`environment.yml`](environment.yml) contains the necessary libraries to run all scripts
 
 It is necessary:
 
@@ -103,7 +103,7 @@ To train a model, you should
     * Classification
     * Denoising/Erasing
 
-2. correct [`configs.yaml`](https://github.com/vitekspeedcuber/Ultrasound/blob/main/configs.yaml) file
+2. correct [`configs.yaml`](configs.yaml) file
 
    **`!Attention!`** Do not forget to specify **path to folder with train data**.
    
@@ -127,7 +127,7 @@ or with parameters
 As a result, you will receive 
 
 * the saved best model `.pth` next to files with code
-* a log file `.tfevents` of the training process in folder where the results of experiments from the tensorboard will be recorded (see [`configs.yaml`](https://github.com/vitekspeedcuber/Ultrasound/blob/main/configs.yaml) file)
+* a log file `.tfevents` of the training process in folder where the results of experiments from the tensorboard will be recorded (see [`configs.yaml`](configs.yaml) file)
 
 ## Inference Examples
 
