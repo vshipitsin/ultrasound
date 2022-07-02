@@ -5,7 +5,7 @@
 
 This repository is dedicated to the implementation of the idea of a **Global Adaptive Filtering Layer**
 
-![block diagram](inference/flowchart.png)
+![block diagram](images/flowchart.png)
 
 ## Installation Requirements
 
@@ -135,21 +135,21 @@ As a result, you will receive
 
 From left to right: ultrasound slice, ground truth mask, segmentation result performed by base model and with _spectrum_, _spectrum log_ and _phase_ adjustments.
 
-![Patient 11](inference/segmentation_endocrinology_11.gif)
-![Patient 15](inference/segmentation_endocrinology_15.gif)
+![Patient 11](images/segmentation_endocrinology_11.gif)
+![Patient 15](images/segmentation_endocrinology_15.gif)
 
 From left to right: ultrasound slice, ground truth mask, segmentation result performed by base model and with _general spectrum_ adjustment.
 
-![Patient 4](inference/segmentation_general_endocrinology_4.gif)
-![Patient 6](inference/segmentation_general_endocrinology_6.gif)
-![Patient 7](inference/segmentation_general_endocrinology_7.gif)
+![Patient 4](images/segmentation_general_endocrinology_4.gif)
+![Patient 6](images/segmentation_general_endocrinology_6.gif)
+![Patient 7](images/segmentation_general_endocrinology_7.gif)
 
 ### Erasing Results on **BUSI** Dataset
 
 From left to right: ultrasound slice, corrupted image, restored image by base model and with _spectrum_, _spectrum log_ and _phase_ adjustments.
 
-![erasing BUSI benign 2](inference/erasing_BUSI_benign_2.png)
-![erasing BUSI malignant 2](inference/erasing_BUSI_malignant_2.png)
+![erasing BUSI benign 2](images/erasing_BUSI_benign_2.png)
+![erasing BUSI malignant 2](images/erasing_BUSI_malignant_2.png)
 
 ## Citation
 
