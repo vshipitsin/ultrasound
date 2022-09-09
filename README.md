@@ -156,12 +156,14 @@ From left to right: ultrasound slice, corrupted image, restored image by base mo
 If you use this package in your publications or other work, please cite it as follows:
 
 ```
-@article{shipitsin2021global,
-         author={Shipitsin, Viktor and Bespalov, Iaroslav and Dylov, Dmitry V},
-         year={2021},
-         month=Mar,
-         title={Global Adaptive Filtering Layer for Computer Vision},
-         journal={arXiv preprint arXiv:2010.01177v3},
+@article{2022_gafl,
+  title={GAFL: Global adaptive filtering layer for computer vision},
+  author={Shipitsin, Viktor and Bespalov, Iaroslav and Dylov, Dmitry V},
+  journal={Computer Vision and Image Understanding},
+  volume={223},
+  pages={103519},
+  year={2022},
+  publisher={Elsevier}
 }
 ```
 
