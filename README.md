@@ -166,7 +166,3 @@ If you use this package in your publications or other work, please cite it as fo
   publisher={Elsevier}
 }
 ```
-
-## Contacts
-
-Viktor Shipitsin - `shipitsin@phystech.edu`
